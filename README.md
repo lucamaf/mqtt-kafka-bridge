@@ -109,14 +109,17 @@ Open the GUI in your browser at [http://localhost:8080](http://localhost:8080)
 
 ---
 
-Let me know if you'd like this as a Markdown file or integrated into in-code documentation comments.
 
 ### **Run in Containers**
 
 ▶️ Build and Run the Docker Container
 
 #### Build the container
-docker build -t mqtt-kafka-bridge .
+podman build -t mqtt-kafka-bridge .
+
+#### Run the 2 brokers to connect to
+podman run -d --name kafka-broker -p 9092:9092 apache/kafka:latest
+podman run -it -p 1883:1883 -v "$PWD/mosquitto/config:/mosquitto/config" -v "$PWD/mosquitto/data:/mosquitto/data" -v "$PWD/mosquitto/log:/mosquitto/log" --privileged eclipse-mosquitto
 
 #### Run the container
 docker run -p 8080:8080 --env-file .env mqtt-kafka-bridge
